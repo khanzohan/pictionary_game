@@ -13,13 +13,26 @@ RUN npm ci --only=production=false
 # Copy application code
 COPY . .
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S reactuser -u 1001 -G nodejs
+# Create user with same UID as host user (1000 is common on Ubuntu)
+ARG USER_ID=1000
+ARG GROUP_ID=1000
 
-# Change ownership of the app directory
-RUN chown -R reactuser:nodejs /app
-USER reactuser
+# Use existing user/group if they match the IDs, otherwise create new ones
+RUN if getent group $GROUP_ID > /dev/null 2>&1; then \
+      GROUP_NAME=$(getent group $GROUP_ID | cut -d: -f1); \
+    else \
+      addgroup -g $GROUP_ID -S nodejs && GROUP_NAME=nodejs; \
+    fi && \
+    if getent passwd $USER_ID > /dev/null 2>&1; then \
+      USER_NAME=$(getent passwd $USER_ID | cut -d: -f1); \
+    else \
+      adduser -S reactuser -u $USER_ID -G $GROUP_NAME && USER_NAME=reactuser; \
+    fi
+
+# Change ownership of the app directory  
+RUN chown -R $USER_ID:$GROUP_ID /app
+
+USER $USER_ID:$GROUP_ID
 
 # Expose port
 EXPOSE 3000
