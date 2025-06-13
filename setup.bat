@@ -5,6 +5,9 @@ REM Automatically sets up environment files for development
 
 echo 🎨 Setting up Pictionary Game environment...
 
+REM Note: Using root user in development container for simplicity
+REM Production builds use proper non-root user for security
+
 REM Root level environment for Docker Compose
 if not exist .env (
     copy env.local.txt .env >nul

@@ -5,6 +5,9 @@
 
 echo "🎨 Setting up Pictionary Game environment..."
 
+# Note: Using root user in development container for simplicity
+# Production builds use proper non-root user for security
+
 # Root level environment for Docker Compose
 if [ ! -f .env ]; then
     cp env.local.txt .env
@@ -37,9 +40,11 @@ echo ""
 echo "🎉 Setup complete!"
 echo ""
 echo "Next steps:"
-echo "1. Start the game: docker-compose up"
+echo "1. Start the game: docker-compose up --build"
 echo "2. Open browser: http://localhost:3000"
 echo "3. Create a game and share the Game ID with friends!"
+echo ""
+echo "Note: The --build flag is needed for the first run."
 echo ""
 echo "For manual setup without Docker:"
 echo "- Backend: cd backend && pip install -r requirements.txt && python start.py dev"

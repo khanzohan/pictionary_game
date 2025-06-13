@@ -35,7 +35,7 @@ cd pictionary-game
 cp env.local.txt .env
 
 # 3. Start everything with one command!
-docker-compose up
+docker-compose up --build
 ```
 
 **That's it! 🎉**

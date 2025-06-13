@@ -22,7 +22,7 @@ setup.bat         # Windows
 cp env.local.txt .env
 
 # Start everything with one command
-docker-compose up
+docker-compose up --build
 ```
 
 ### 🎮 Play the Game

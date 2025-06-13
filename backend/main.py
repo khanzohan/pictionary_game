@@ -53,6 +53,8 @@ async def create_game():
 @app.get("/api/games/{game_id}")
 async def get_game(game_id: str):
     """Get game state"""
+    # Convert to lowercase for case-insensitive lookup
+    game_id = game_id.lower()
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
     
@@ -70,6 +72,8 @@ async def get_game(game_id: str):
 @app.post("/api/games/{game_id}/join")
 async def join_game(game_id: str, player_data: dict):
     """Join a game room"""
+    # Convert to lowercase for case-insensitive lookup
+    game_id = game_id.lower()
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
     
@@ -99,6 +103,8 @@ async def join_game(game_id: str, player_data: dict):
 @app.post("/api/games/{game_id}/start")
 async def start_game(game_id: str):
     """Start the game"""
+    # Convert to lowercase for case-insensitive lookup
+    game_id = game_id.lower()
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
     
@@ -131,6 +137,8 @@ async def start_game(game_id: str):
 @app.post("/api/games/{game_id}/guess")
 async def make_guess(game_id: str, guess_data: dict):
     """Make a guess"""
+    # Convert to lowercase for case-insensitive lookup
+    game_id = game_id.lower()
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
     
@@ -182,6 +190,8 @@ async def make_guess(game_id: str, guess_data: dict):
 @app.post("/api/games/{game_id}/reset")
 async def reset_game(game_id: str):
     """Reset the game"""
+    # Convert to lowercase for case-insensitive lookup
+    game_id = game_id.lower()
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
     
@@ -201,6 +211,8 @@ async def reset_game(game_id: str):
 # WebSocket endpoint for real-time communication
 @app.websocket("/ws/{game_id}/{player_id}")
 async def websocket_endpoint(websocket: WebSocket, game_id: str, player_id: str):
+    # Convert to lowercase for case-insensitive lookup
+    game_id = game_id.lower()
     await connection_manager.connect(websocket, game_id, player_id)
     
     try:
@@ -234,6 +246,7 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str, player_id: str)
 # Game timer function
 async def game_timer(game_id: str):
     """Handle game timer countdown"""
+    # game_id is already lowercase when passed from other functions
     if game_id not in games:
         return
     
@@ -267,6 +280,7 @@ async def next_round_delay(game_id: str):
     """Wait before starting next round"""
     await asyncio.sleep(3)  # 3 second delay
     
+    # game_id is already lowercase when passed from other functions
     if game_id not in games:
         return
     
